@@ -47,8 +47,50 @@ model Client {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   brandKit       BrandKit?
+  campaigns      Campaign[]
   @@index([ownerId, status])
   @@map("clients")
+}
+
+enum CampaignStatus {
+  DRAFT
+  GENERATED
+  APPROVED
+}
+enum PostPlatform {
+  FACEBOOK
+  INSTAGRAM
+  LINKEDIN
+  GOOGLE_BUSINESS
+}
+
+model Campaign {
+  id        String         @id @default(cuid())
+  clientId  String
+  client    Client         @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  brief     String
+  days      Int            @default(30)
+  status    CampaignStatus @default(DRAFT)
+  posts     ContentPost[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  @@index([clientId, createdAt])
+  @@map("campaigns")
+}
+
+model ContentPost {
+  id          String       @id @default(cuid())
+  campaignId  String
+  campaign    Campaign     @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  platform    PostPlatform
+  title       String
+  caption     String
+  hashtags    String[]     @default([])
+  imagePrompt String?
+  scheduledFor DateTime?
+  createdAt   DateTime     @default(now())
+  @@index([campaignId])
+  @@map("content_posts")
 }
 
 model BrandKit {
