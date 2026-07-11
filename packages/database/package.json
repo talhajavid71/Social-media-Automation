@@ -1,0 +1,12 @@
+{
+  "name": "@nextserve/database",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev"
+  },
+  "dependencies": { "@prisma/client": "6.19.3" },
+  "devDependencies": { "prisma": "6.19.3" }
+}
