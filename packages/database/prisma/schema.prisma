@@ -46,6 +46,26 @@ model Client {
   owner          User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+  brandKit       BrandKit?
   @@index([ownerId, status])
   @@map("clients")
+}
+
+model BrandKit {
+  id             String   @id @default(cuid())
+  clientId       String   @unique
+  client         Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  primaryColor   String   @default("#176b4b")
+  secondaryColor String   @default("#dfff9e")
+  accentColor    String   @default("#13201c")
+  headingFont    String   @default("Inter")
+  bodyFont       String   @default("Inter")
+  toneOfVoice    String?
+  targetAudience String?
+  brandStory     String?
+  products       String[] @default([])
+  services       String[] @default([])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  @@map("brand_kits")
 }
