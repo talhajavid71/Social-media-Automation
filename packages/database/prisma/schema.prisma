@@ -22,6 +22,30 @@ model User {
   resetTokenExpiresAt DateTime?
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
+  clients            Client[]
 
   @@map("users")
+}
+
+enum ClientStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+model Client {
+  id             String       @id @default(cuid())
+  name           String
+  industry       String
+  contactName    String?
+  contactEmail   String?
+  website        String?
+  timezone       String       @default("Asia/Karachi")
+  marketingGoals String?
+  status         ClientStatus @default(ACTIVE)
+  ownerId        String
+  owner          User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  @@index([ownerId, status])
+  @@map("clients")
 }
